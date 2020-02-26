@@ -4,7 +4,8 @@ module Task1
   ( associator
   , distributivity
   , eitherAssoc
-  ) where
+  )
+where
 
 distributivity :: Either a (b, c) -> (Either a b, Either a c)
 distributivity (Left  a     ) = (Left a, Left a)

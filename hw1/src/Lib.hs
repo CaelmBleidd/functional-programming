@@ -1,6 +1,6 @@
 module Lib
-       ( plusTwo
-       ) where
+    ( someFunc
+    ) where
 
-plusTwo :: [Int] -> [Int]
-plusTwo = map (+2)
+someFunc :: IO ()
+someFunc = putStrLn "someFunc"
