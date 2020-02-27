@@ -14,18 +14,21 @@ type Neg a = a -> Void
 doubleNeg :: a -> Neg (Neg a)
 doubleNeg f x = x f
 
--- (Either a (Neg a) -> Void) -> Void
--- f :: (Either a (Neg a) -> Void)
 excludedNeg :: Neg (Neg (Either a (Neg a)))
-excludedNeg = undefined
+excludedNeg = \f -> f $ Right $ f . Left
 
--- impossible
+-- This expression has no proof in IL
+-- therefore it's an uninhabited type
 pierce :: ((a -> b) -> a) -> a
 pierce = undefined
 
--- impossible
+-- This expression has no proof in IL
+-- therefore it's an uninhabited type
 doubleNegElim :: Neg (Neg a) -> a
 doubleNegElim = undefined
 
 thirdNegElim :: Neg (Neg (Neg a)) -> Neg a
-thirdNegElim = undefined
+thirdNegElim = controposition doubleNeg
+  where 
+    controposition :: (a -> b) -> (Neg b -> Neg a)
+    controposition f g a = g $ f a
