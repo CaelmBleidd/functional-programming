@@ -1,6 +1,6 @@
 module Task3
-  ( contraction
-  , composition
+  ( composition
+  , contraction
   , identity
   , permutation
   , s

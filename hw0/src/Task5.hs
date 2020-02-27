@@ -1,7 +1,7 @@
 module Task5
-  ( churchPlus
+  ( churchMult
+  , churchPlus
   , churchToInt
-  , churchMult
   , intToChurch
   , succChurch
   , zero
