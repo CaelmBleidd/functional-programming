@@ -3,9 +3,10 @@ module Block1Spec.Task2Spec
   )
 where
 
-import Block1.Task2
-import Prelude hiding (div, mod, toInteger)
-import Test.Hspec
+import           Block1.Task2
+import           Prelude                 hiding ( div, mod, toInteger )
+import           Test.Hspec
+import           Test.QuickCheck
 
 spec :: Spec
 spec = do
@@ -63,3 +64,24 @@ spec = do
         `shouldBe` (fromInteger (2) :: Nat)
       mod (fromInteger (15) :: Nat) (fromInteger (3) :: Nat)
         `shouldBe` (fromInteger (0) :: Nat)
+
+
+  describe "Property based tests" $ do
+    it "sum" $ do
+      property $ \a b ->
+        (fromInteger (abs (a)) :: Nat)
+          +  (fromInteger (abs (b)) :: Nat)
+          == fromInteger (abs (a) + abs (b))
+    it "mult" $ do
+      property $ \a b ->
+        (fromInteger (abs (a)) :: Nat)
+          *  (fromInteger (abs (b)) :: Nat)
+          == fromInteger (abs (a) * abs (b))
+    it "subtruct" $ do
+      property $ \a b ->
+        (fromInteger (max (abs a) (abs b)) :: Nat)
+          -  (fromInteger (min (abs a) (abs b)) :: Nat)
+          == fromInteger (max (abs a) (abs b) - (min (abs a) (abs b)))
+    it "lessOrEquals" $ do
+      property $ \a b ->
+        (((fromInteger (abs a)) :: Nat)  <= (fromInteger (abs b))) == (abs (a) <= abs (b))
