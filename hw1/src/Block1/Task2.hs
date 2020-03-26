@@ -18,6 +18,9 @@ where
 data Nat = Z | S Nat deriving(Show)
 
 -- | Num implementation for Nat
+-- | Nut can be constructed only from non-negative numbers
+-- | Attemption to create Nat from negative number will cause error
+-- | (-) will cause error if second argument is greater the the first one
 instance Num Nat where
   (+) :: Nat -> Nat -> Nat
   (+) first second = add first second
