@@ -7,6 +7,11 @@ import Block6.Task3 (numParser, spaces)
 import Control.Applicative ((<|>))
 import Control.Monad ((>=>))
 
+-- | Takes description of list of lists and build [[a]]
+-- | Decription in format: 
+-- | "numberOfElement /elements with comma/, numberOfElements ..."
+-- | For example, for call `runParser listlistParser "2, 1, 2, 3, 1, 2, 3"` 
+-- | output is Just ([[1, 2], [1, 2, 3]], "")
 listlistParser :: Parser Char [[Int]]
 listlistParser = Parser $
   runParser ((spaces *> (element ',') *> numParser) <|> numParser) >=> \(amount, rest) ->

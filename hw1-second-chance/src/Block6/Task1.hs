@@ -9,6 +9,9 @@ import Control.Applicative
 import Control.Monad ((>=>))
 import Data.Bifunctor (first)
 
+-- | Parser data structure 
+-- | Takes list of elements with type s
+-- | Returns Maybe (element of type a, rest of [s])
 data Parser s a = Parser { runParser :: [s] -> Maybe (a, [s]) }
 
 instance Functor (Parser s) where

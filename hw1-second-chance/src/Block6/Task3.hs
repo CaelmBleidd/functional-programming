@@ -13,6 +13,10 @@ import Control.Applicative (many, some, (<|>))
 import Control.Monad ((>=>))
 import Data.Char (isDigit)
 
+-- | Parser for correctBracketSequence
+-- | runParser returns Just (bracketSeq, "") if
+-- | given line is correct bracket sequence,
+-- | Nothing otherwise
 correctBracketSequenceParser :: Parser Char String
 correctBracketSequenceParser = Parser $
   runParser (parensParser 0 "") >=> \((balance, bracketSeq), rest) ->
@@ -38,6 +42,7 @@ rParenParser = Parser $ \case
   []     -> Just ((0, ""), "")
   (x:xs) -> if x == ')' then Just ((-1, ")"), xs) else Nothing
 
+-- | Parses zero or some whitespaces
 spaces :: Parser Char [Char]
 spaces = many (element ' ')
 
@@ -58,6 +63,8 @@ minusSignParser = Parser $ \case
 (+++) (Parser runPf) (Parser runPa) = Parser $
   runPf >=> \(x, xs) -> runPa xs >>= \(y, ys) -> Just (x <> y, ys)
 
+-- | Parser for Int. Takes String, returns Just (number, rest)
+-- | if first in line are digits or whitespaces, Nothing otherwise
 numParser :: Parser Char Int
 numParser = Parser $
   runParser ((spaces *> (plusSignParser <|> minusSignParser <|> ok)) +++ digits) >=>
