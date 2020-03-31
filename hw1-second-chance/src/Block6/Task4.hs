@@ -8,14 +8,20 @@ import Control.Applicative ((<|>))
 import Control.Monad ((>=>))
 
 -- | Takes description of list of lists and build [[a]]
--- | Decription in format: 
+-- | Description in format:
 -- | "numberOfElement /elements with comma/, numberOfElements ..."
--- | For example, for call `runParser listlistParser "2, 1, 2, 3, 1, 2, 3"` 
+-- | For example, for call `runParser listlistParser "2, 1, 2, 3, 1, 2, 3"`
 -- | output is Just ([[1, 2], [1, 2, 3]], "")
+-- | For empty input string returns Nothing
 listlistParser :: Parser Char [[Int]]
 listlistParser = Parser $
-  runParser ((spaces *> (element ',') *> numParser) <|> numParser) >=> \(amount, rest) ->
-    runParser ((listParser amount) ++++ (spaces *> (listlistParser <|> eof))) rest
+  runParser numParser >=> \(amount, rest) ->
+    runParser ((listParser amount) ++++ (spaces *> (listlistParser' <|> eof))) rest
+
+listlistParser' :: Parser Char [[Int]] 
+listlistParser' = Parser $ 
+  runParser (spaces *> (element ',') *> numParser) >=> \(amount, rest) ->
+    runParser ((listParser amount) ++++ (spaces *> (listlistParser' <|> eof))) rest 
 
 listParser :: Int -> Parser Char [Int]
 listParser amount = Parser $ \s ->
@@ -24,7 +30,7 @@ listParser amount = Parser $ \s ->
     else if amount == 0
       then Just ([], s)
       else runParser
-        (((spaces *> (element ',') *> numParser) <|> numParser) ++++ (listParser (amount - 1))) s
+        ((spaces *> (element ',') *> numParser) ++++ (listParser (amount - 1))) s
 
 (++++) :: Parser s a -> Parser s [a] -> Parser s [a]
 (++++) first second = Parser $
